@@ -40,7 +40,7 @@ class Spell
   # This instance method should return the reversed name of a spell
   # Tests: `bundle exec rspec -t reverse .`
   def reverse_name
-    'write this method'
+    return name.reverse
   end
 
   # Spell 2: Counter
@@ -48,7 +48,17 @@ class Spell
   # (integer) of mentions of the spell.
   # Tests: `bundle exec rspec -t counter .`
   def mention_count
-    'write this method'
+      #use mention.rb file
+      mArr = Mention.data
+      counter = 0
+      
+      for m in mArr
+        if name == m["Spell"]
+            counter += 1
+        end
+      end
+              
+     return counter
   end
 
   # Spell 3: Letter
@@ -56,7 +66,16 @@ class Spell
   # which start with the same first letter as the spell's name
   # Tests: `bundle exec rspec -t letter .`
   def names_with_same_first_letter
-    ['write this method']
+      spells = Spell.data
+      spellArr = []
+      
+      for s in spells
+          if name[0] == s["Spell(Lower)"][0]
+              spellArr.push(s["Spell(Lower)"]) #adding it to array
+          end
+      end
+      
+      return spellArr
   end
 
   # Spell 4: Lookup
@@ -65,10 +84,20 @@ class Spell
   # If none are found it should return nil.
   # Tests: `bundle exec rspec -t lookup .`
   def self.find_by_mention(mention)
-    Spell.new({"Classification" => 'write this method',
-               "Effect" => 'write this method',
-               "Spell(Lower)" => 'write this method',
-               "Spell" => 'write this method'})
+    spells = Spell.data
+
+    for s in spells
+        #take mention object name (default lower) and look for it in Spell.data
+        if mention.name == s["Spell(Lower)"]
+            #create new Spell object
+            found = Spell.new({"Classification" => s["Classification"],
+               "Effect" => s["Effect"],
+               "Spell(Lower)" => s["Spell(Lower)"],
+               "Spell" => s["Spell"]})
+            return found
+        end
+    end
+    return nil
   end
 
 end
